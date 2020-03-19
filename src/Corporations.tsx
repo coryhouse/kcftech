@@ -7,7 +7,16 @@ function Corporations() {
     { id: 3, name: "Amazon", icon: "amazon.png" }
   ];
 
-  return <h1>Corporations</h1>;
+  return (
+    <>
+      <h1>Corporations</h1>
+      <ul>
+        {corporations.map(corp => {
+          return <li>{corp.name}</li>;
+        })}
+      </ul>
+    </>
+  );
 }
 
 export default Corporations;
