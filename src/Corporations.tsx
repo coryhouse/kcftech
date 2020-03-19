@@ -25,7 +25,7 @@ function Corporations() {
   // NOT a source of truth.
   function renderCorporation(corp: Corporation) {
     return (
-      <tr>
+      <tr key={corp.id}>
         <td>
           <button onClick={() => onDeleteClick(corp.id)}>Delete</button>
         </td>
