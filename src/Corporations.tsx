@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getCorporations } from "./api/corporations";
+import { getCorporations, deleteCorporation } from "./api/corporations";
 
 // Next steps:
 // 1. Delete via the API
@@ -26,7 +26,8 @@ function Corporations() {
     // 2nd arg is the dependency array. It specifies when this effect should re-run
   }, []);
 
-  function onDeleteClick(id: Number) {
+  async function onDeleteClick(id: Number) {
+    await deleteCorporation(id);
     const newCorporations = corporations.filter(corp => corp.id !== id);
     setCorporations(newCorporations);
   }
