@@ -37,7 +37,12 @@ function Corporations() {
     return (
       <tr key={corp.id}>
         <td>
-          <button onClick={() => onDeleteClick(corp.id)}>Delete</button>
+          <button
+            aria-label={`Delete ${corp.name} with ID ${corp.id}`}
+            onClick={() => onDeleteClick(corp.id)}
+          >
+            Delete
+          </button>
         </td>
         <td>{corp.id}</td>
         <td>{corp.name}</td>
