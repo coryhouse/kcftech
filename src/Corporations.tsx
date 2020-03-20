@@ -13,7 +13,8 @@ const newCorp = {
 
 function Corporations() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isDeleting, setIsDeleting] = useState(true);
+  // Array of Corporation IDs currently being deleted.
+  const [isDeleting, setIsDeleting] = useState<Number[]>([]);
   const [corporations, setCorporations] = useState<Corporation[]>([]);
   const [corporation, setCorporation] = useState<AddCorporationRequest>(
     newCorp
@@ -31,11 +32,11 @@ function Corporations() {
   }, []);
 
   async function onDeleteClick(id: Number) {
-    setIsDeleting(true);
+    setIsDeleting(currentState => [...currentState, id]);
     await deleteCorporation(id);
     const newCorporations = corporations.filter(corp => corp.id !== id);
     setCorporations(newCorporations);
-    setIsDeleting(false);
+    setIsDeleting(currentState => currentState.filter(v => v !== id));
   }
 
   async function onAddCorporation(event: React.FormEvent<HTMLFormElement>) {
@@ -52,15 +53,16 @@ function Corporations() {
   // In React, HTML is a projection of app state
   // NOT a source of truth.
   function renderCorporation(corp: Corporation) {
+    const deleteInProgress = isDeleting.some(v => v === corp.id);
     return (
       <tr key={corp.id}>
         <td>
           <button
-            disabled={isDeleting}
+            disabled={deleteInProgress}
             aria-label={`Delete ${corp.name}`}
             onClick={() => onDeleteClick(corp.id)}
           >
-            Delete {isDeleting && <Spinner size="small" />}
+            Delete {deleteInProgress && <Spinner size="small" />}
           </button>
         </td>
         <td>{corp.id}</td>
