@@ -5,13 +5,17 @@ import {
   addCorporation
 } from "./api/corporationsApi";
 
+const newCorp = {
+  name: "",
+  icon: ""
+};
+
 function Corporations() {
   // Must put this in state because we want React to redraw the screen when this data changes.
   const [corporations, setCorporations] = useState<Corporation[]>([]);
-  const [corporation, setCorporation] = useState<AddCorporationRequest>({
-    name: "",
-    icon: ""
-  });
+  const [corporation, setCorporation] = useState<AddCorporationRequest>(
+    newCorp
+  );
 
   // This runs by default as every render.
   useEffect(() => {
@@ -33,6 +37,7 @@ function Corporations() {
     event.preventDefault(); // Prevent the form from posting back to the server.
     const savedCorporation = await addCorporation(corporation);
     setCorporations([...corporations, savedCorporation]);
+    setCorporation(newCorp); // Reset the form
   }
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -46,7 +51,7 @@ function Corporations() {
       <tr key={corp.id}>
         <td>
           <button
-            aria-label={`Delete ${corp.name} with ID ${corp.id}`}
+            aria-label={`Delete ${corp.name}`}
             onClick={() => onDeleteClick(corp.id)}
           >
             Delete
