@@ -5,12 +5,6 @@ import {
   addCorporation
 } from "./api/corporationsApi";
 
-type AddCorporationRequest = {
-  name: string;
-  icon: string;
-  [index: string]: string;
-};
-
 function Corporations() {
   // Must put this in state because we want React to redraw the screen when this data changes.
   const [corporations, setCorporations] = useState<Corporation[]>([]);
@@ -35,15 +29,14 @@ function Corporations() {
     setCorporations(newCorporations);
   }
 
-  function onAddCorporation(event: React.FormEvent<HTMLFormElement>) {
+  async function onAddCorporation(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); // Prevent the form from posting back to the server.
-    // addCorporation();
+    const savedCorporation = await addCorporation(corporation);
+    setCorporations([...corporations, savedCorporation]);
   }
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const newCorp = { ...corporation };
-    newCorp[event.target.id] = event.target.value;
-    setCorporation(newCorp);
+    setCorporation({ ...corporation, [event.target.id]: event.target.value });
   }
 
   // In React, HTML is a projection of app state
@@ -76,12 +69,12 @@ function Corporations() {
           <div>
             <label htmlFor="name">Name</label>
             <br />
-            <input id="name" value={corporation.name} onChange={onNameChange} />
+            <input id="name" value={corporation.name} onChange={onChange} />
           </div>
           <div>
             <label htmlFor="icon">Icon</label>
             <br />
-            <input id="icon" value={corporation.icon} />
+            <input id="icon" value={corporation.icon} onChange={onChange} />
           </div>
           <input type="submit" value="Add Corporation" />
         </form>
