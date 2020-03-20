@@ -18,7 +18,7 @@ export async function deleteCorporation(id: Number) {
   throw new Error("Bad network response");
 }
 
-export async function addCorporation(corporation: Corporation) {
+export async function addCorporation(corporation: AddCorporationRequest) {
   const resp = await fetch("http://localhost:3001/corporations/", {
     method: "POST",
     headers: {
