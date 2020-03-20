@@ -4,6 +4,7 @@ import {
   deleteCorporation,
   addCorporation
 } from "./api/corporationsApi";
+import Spinner from "./shared/Spinner";
 
 const newCorp = {
   name: "",
@@ -11,7 +12,7 @@ const newCorp = {
 };
 
 function Corporations() {
-  // Must put this in state because we want React to redraw the screen when this data changes.
+  const [isLoading, setIsLoading] = useState(true);
   const [corporations, setCorporations] = useState<Corporation[]>([]);
   const [corporation, setCorporation] = useState<AddCorporationRequest>(
     newCorp
@@ -22,6 +23,7 @@ function Corporations() {
     async function loadCorporations() {
       const corps = await getCorporations();
       setCorporations(corps);
+      setIsLoading(false);
     }
     loadCorporations();
     // 2nd arg is the dependency array. It specifies when this effect should re-run
@@ -64,10 +66,32 @@ function Corporations() {
     );
   }
 
+  function renderTable() {
+    if (isLoading) return <Spinner />;
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Icon</th>
+          </tr>
+        </thead>
+        <tbody>{corporations.map(renderCorporation)}</tbody>
+      </table>
+    );
+  }
+
+  // Options:
+  // 1. Form validation
+  // 2. Create reusable Input component
+  // 3. Routing (new dedicated edit page)
+  // 4. loading state (spinners/preloader)
+  // 5. Error handling
   return (
     <>
       <h1>Corporations</h1>
-
       <section>
         <h2>Add User</h2>
         <form onSubmit={onAddCorporation}>
@@ -85,17 +109,7 @@ function Corporations() {
         </form>
       </section>
 
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Icon</th>
-          </tr>
-        </thead>
-        <tbody>{corporations.map(renderCorporation)}</tbody>
-      </table>
+      {renderTable()}
     </>
   );
 }
