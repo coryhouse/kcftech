@@ -6,7 +6,9 @@ describe("Corporations", () => {
     cy.findByText("Corporations");
   });
 
-  it("should delete a corporation when the delete button is clicked", () => {
-    cy.findByLabelText("Delete Apple with ID 1");
+  it.only("should delete a corporation when the delete button is clicked", () => {
+    cy.findByText("Apple");
+    cy.findByLabelText("Delete Apple with ID 1").click();
+    cy.findByText("Apple").should("not.exist");
   });
 });
