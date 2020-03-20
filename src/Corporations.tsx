@@ -55,6 +55,24 @@ function Corporations() {
   return (
     <>
       <h1>Corporations</h1>
+
+      <section>
+        <h2>Add User</h2>
+        <form>
+          <div>
+            <label htmlFor="name">Name</label>
+            <br />
+            <input id="name" />
+          </div>
+          <div>
+            <label htmlFor="icon">Icon</label>
+            <br />
+            <input id="icon" />
+          </div>
+          <input type="submit" value="Add User" />
+        </form>
+      </section>
+
       <table>
         <thead>
           <tr>
