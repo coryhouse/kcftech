@@ -13,6 +13,7 @@ const newCorp = {
 
 function Corporations() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(true);
   const [corporations, setCorporations] = useState<Corporation[]>([]);
   const [corporation, setCorporation] = useState<AddCorporationRequest>(
     newCorp
@@ -30,9 +31,11 @@ function Corporations() {
   }, []);
 
   async function onDeleteClick(id: Number) {
+    setIsDeleting(true);
     await deleteCorporation(id);
     const newCorporations = corporations.filter(corp => corp.id !== id);
     setCorporations(newCorporations);
+    setIsDeleting(false);
   }
 
   async function onAddCorporation(event: React.FormEvent<HTMLFormElement>) {
@@ -53,10 +56,11 @@ function Corporations() {
       <tr key={corp.id}>
         <td>
           <button
+            disabled={isDeleting}
             aria-label={`Delete ${corp.name}`}
             onClick={() => onDeleteClick(corp.id)}
           >
-            Delete
+            Delete {isDeleting && <Spinner size="small" />}
           </button>
         </td>
         <td>{corp.id}</td>
@@ -67,7 +71,7 @@ function Corporations() {
   }
 
   function renderTable() {
-    if (isLoading) return <Spinner />;
+    if (isLoading) return <Spinner size="large" />;
     return (
       <table>
         <thead>
