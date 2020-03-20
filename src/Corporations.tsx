@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { getCorporations, deleteCorporation } from "./api/corporations";
+import { getCorporations, deleteCorporation } from "./api/corporationsApi";
 
 // Next steps:
 // 1. Delete via the API
 // 2. Support adding a corp
 // 3. Set up routing
-
-type Corporation = {
-  id: number;
-  name: string;
-  icon: string;
-};
 
 function Corporations() {
   // Must put this in state because we want React to redraw the screen when this data changes.
@@ -30,6 +24,10 @@ function Corporations() {
     await deleteCorporation(id);
     const newCorporations = corporations.filter(corp => corp.id !== id);
     setCorporations(newCorporations);
+  }
+
+  function onAddCorporation(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault(); // Prevent the form from posting back to the server.
   }
 
   // In React, HTML is a projection of app state
@@ -58,7 +56,7 @@ function Corporations() {
 
       <section>
         <h2>Add User</h2>
-        <form>
+        <form onSubmit={onAddCorporation}>
           <div>
             <label htmlFor="name">Name</label>
             <br />
@@ -69,7 +67,7 @@ function Corporations() {
             <br />
             <input id="icon" />
           </div>
-          <input type="submit" value="Add User" />
+          <input type="submit" value="Add Corporation" />
         </form>
       </section>
 
