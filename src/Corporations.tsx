@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { getCorporations, deleteCorporation } from "./api/corporationsApi";
+import {
+  getCorporations,
+  deleteCorporation,
+  addCorporation
+} from "./api/corporationsApi";
 
-// Next steps:
-// 1. Delete via the API
-// 2. Support adding a corp
-// 3. Set up routing
+type AddCorporationRequest = {
+  name: string;
+  icon: string;
+  [index: string]: string;
+};
 
 function Corporations() {
   // Must put this in state because we want React to redraw the screen when this data changes.
   const [corporations, setCorporations] = useState<Corporation[]>([]);
+  const [corporation, setCorporation] = useState<AddCorporationRequest>({
+    name: "",
+    icon: ""
+  });
 
   // This runs by default as every render.
   useEffect(() => {
@@ -28,6 +37,13 @@ function Corporations() {
 
   function onAddCorporation(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); // Prevent the form from posting back to the server.
+    // addCorporation();
+  }
+
+  function onChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const newCorp = { ...corporation };
+    newCorp[event.target.id] = event.target.value;
+    setCorporation(newCorp);
   }
 
   // In React, HTML is a projection of app state
@@ -60,12 +76,12 @@ function Corporations() {
           <div>
             <label htmlFor="name">Name</label>
             <br />
-            <input id="name" />
+            <input id="name" value={corporation.name} onChange={onNameChange} />
           </div>
           <div>
             <label htmlFor="icon">Icon</label>
             <br />
-            <input id="icon" />
+            <input id="icon" value={corporation.icon} />
           </div>
           <input type="submit" value="Add Corporation" />
         </form>
